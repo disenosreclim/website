@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.reclim.com/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.reclim.com/images/hero-electronics.png</image:loc>
+      <image:title>RECLIM - Recolección y gestión responsable de residuos electrónicos</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.reclim.com/images/mexico-coverage-map.png</image:loc>
+      <image:title>RECLIM - Cobertura en 7 ciudades de México</image:title>
+    </image:image>
+  </url>
+</urlset>

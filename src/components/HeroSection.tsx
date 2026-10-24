@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 import { siteConfig } from "../config/siteConfig";
 import { trackContactClick } from "../utils/analytics";
+import heroImg from "../assets/hero-electronics.png";
 
 export const HeroSection: React.FC = () => {
   const handleCtaClick = () => {
@@ -102,11 +103,10 @@ export const HeroSection: React.FC = () => {
               {/* Soft decorative background shadow */}
               <div className="absolute -inset-2 bg-gradient-to-r from-reclim-primary/10 to-reclim-accent/15 rounded-3xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity" />
 
-              {/* Picture Element supporting modern WebP with PNG fallback */}
-              <picture className="relative block rounded-2xl overflow-hidden shadow-soft border border-gray-100/60 bg-white">
-                <source srcSet="/images/hero-electronics.webp" type="image/webp" />
+              {/* Visual image */}
+              <div className="relative block rounded-2xl overflow-hidden shadow-soft border border-gray-100/60 bg-white">
                 <img
-                  src="/images/hero-electronics.png"
+                  src={heroImg}
                   alt="Gestión y recolección de equipos electrónicos y computadoras - RECLIM"
                   className="w-full h-auto object-cover object-center transform transition-transform duration-500 group-hover:scale-102"
                   width="800"
@@ -114,7 +114,7 @@ export const HeroSection: React.FC = () => {
                   loading="eager"
                   fetchPriority="high"
                 />
-              </picture>
+              </div>
 
               {/* Floating Highlight Pill */}
               <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl shadow-lg border border-gray-100 flex items-center gap-3">

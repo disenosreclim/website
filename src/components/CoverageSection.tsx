@@ -1,6 +1,7 @@
 import React from "react";
 import { MapPin, Calendar, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "../config/siteConfig";
+import mexicoMapImg from "../assets/mexico-coverage-map.png";
 
 export const CoverageSection: React.FC = () => {
   return (
@@ -35,17 +36,16 @@ export const CoverageSection: React.FC = () => {
                 
                 {/* Mexico Map Visual */}
                 <div className="md:col-span-6 relative flex justify-center">
-                  <picture className="w-full max-w-[280px]">
-                    <source srcSet="/images/mexico-coverage-map.webp" type="image/webp" />
+                  <div className="w-full max-w-[280px]">
                     <img
-                      src="/images/mexico-coverage-map.png"
+                      src={mexicoMapImg}
                       alt="Mapa de cobertura RECLIM en 7 ciudades de México"
                       className="w-full h-auto object-contain filter drop-shadow-md"
                       width="320"
                       height="320"
                       loading="lazy"
                     />
-                  </picture>
+                  </div>
 
                   {/* Badge: Más de 7 ciudades de cobertura */}
                   <div className="absolute -top-3 right-0 sm:right-2 bg-reclim-dark text-white text-xs font-bold py-1.5 px-3 rounded-full shadow-md flex items-center gap-1.5">

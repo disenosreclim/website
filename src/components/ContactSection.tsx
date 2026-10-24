@@ -1,19 +1,12 @@
 import React from "react";
-import { Phone, Mail, MapPin, Sparkles, MessageCircle } from "lucide-react";
-import { siteConfig } from "../config/siteConfig";
+import { MapPin, Sparkles, Building2, ShieldCheck, Clock } from "lucide-react";
 import { ContactForm } from "./ContactForm";
-import { trackContactClick } from "../utils/analytics";
 
 interface ContactSectionProps {
   onOpenPrivacy: () => void;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPrivacy }) => {
-  const handleWhatsApp = () => {
-    trackContactClick("whatsapp_floating");
-    window.open(siteConfig.socialLinks.whatsapp, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <section id="contacto" className="w-full py-20 sm:py-28 bg-reclim-surface/60 border-t border-gray-100">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +32,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPrivacy })
             <div className="relative z-10 space-y-6">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-reclim-accent border border-white/10">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Contacto</span>
+                <span>Atención Corporativa</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
@@ -47,65 +40,54 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPrivacy })
               </h2>
 
               <p className="text-sm sm:text-base text-gray-200 leading-relaxed">
-                Completa el formulario y nuestro equipo revisará los requerimientos de tu empresa para ofrecerte
-                la mejor solución de recolección y aprovechamiento.
+                Completa el formulario y nuestro equipo revisará los requerimientos de tu organización para
+                coordinar la recolección y darte la mejor solución de gestión responsable.
               </p>
 
-              {/* Contact Information List */}
-              <div className="pt-4 space-y-5 text-sm">
-                <a
-                  href={`tel:${siteConfig.contact.phoneValue}`}
-                  className="flex items-center gap-4 group p-3 rounded-xl hover:bg-white/10 transition-colors"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent group-hover:scale-105 transition-transform">
-                    <Phone className="w-5 h-5" />
+              {/* Informative Value Points */}
+              <div className="pt-2 space-y-5 text-sm">
+                <div className="flex items-start gap-4 p-3 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent mt-0.5">
+                    <Building2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="block text-xs text-gray-300 font-medium">Llámanos o escríbenos</span>
-                    <span className="text-base font-bold text-white group-hover:text-reclim-accent transition-colors">
-                      {siteConfig.contact.phoneDisplay}
+                    <span className="block text-sm font-bold text-white">Servicio para empresas e instituciones</span>
+                    <span className="text-xs text-gray-300 leading-relaxed block mt-0.5">
+                      Atendemos comercios, oficinas y organizaciones de distintos sectores en todo el país.
                     </span>
                   </div>
-                </a>
+                </div>
 
-                <a
-                  href={`mailto:${siteConfig.contact.email}`}
-                  className="flex items-center gap-4 group p-3 rounded-xl hover:bg-white/10 transition-colors"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent group-hover:scale-105 transition-transform">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block text-xs text-gray-300 font-medium">Correo electrónico</span>
-                    <span className="text-base font-bold text-white group-hover:text-reclim-accent transition-colors break-all">
-                      {siteConfig.contact.email}
-                    </span>
-                  </div>
-                </a>
-
-                <div className="flex items-center gap-4 p-3 rounded-xl">
-                  <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent">
+                <div className="flex items-start gap-4 p-3 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent mt-0.5">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="block text-xs text-gray-300 font-medium">Ubicación y Cobertura</span>
-                    <span className="text-sm font-semibold text-white">
-                      {siteConfig.contact.coverageScope}
+                    <span className="block text-sm font-bold text-white">Alcance en 7 ciudades</span>
+                    <span className="text-xs text-gray-300 leading-relaxed block mt-0.5">
+                      Culiacán, Los Mochis, Guadalajara, Tuxtla Gutiérrez, Villahermosa, Oaxaca y Mérida.
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-3 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-reclim-accent mt-0.5">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="block text-sm font-bold text-white">Respuesta personalizada</span>
+                    <span className="text-xs text-gray-300 leading-relaxed block mt-0.5">
+                      Un asesor se comunicará contigo utilizando los datos proporcionados en el formulario.
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Quick WhatsApp Action in Card */}
-            <div className="relative z-10 pt-8 mt-6 border-t border-white/10">
-              <button
-                onClick={handleWhatsApp}
-                className="w-full flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 px-4 rounded-xl transition-all shadow-md cursor-pointer"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Escríbenos por WhatsApp</span>
-              </button>
+            {/* Bottom Confidentiality Reassurance */}
+            <div className="relative z-10 pt-8 mt-6 border-t border-white/10 flex items-center gap-2.5 text-xs text-gray-300">
+              <ShieldCheck className="w-4 h-4 text-reclim-accent shrink-0" />
+              <span>Tus datos son tratados bajo estricta confidencialidad.</span>
             </div>
           </div>
 

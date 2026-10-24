@@ -45,7 +45,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -65,7 +65,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
           <ul className="list-disc pl-5 space-y-1">
             <li>Atender, evaluar y responder a su solicitud de servicios de recolección y gestión de equipos electrónicos.</li>
             <li>Elaborar y enviarle cotizaciones o propuestas logísticas acordes a su volumen de material.</li>
-            <li>Coordinar las visitas técnicas o de recolección en los puntos acordados.</li>
+            <li>Coordinar la atención en las ciudades correspondientes.</li>
             <li>Mantener la comunicación necesaria para la correcta prestación del servicio.</li>
           </ul>
 
@@ -76,10 +76,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
           <h4 className="font-bold text-reclim-text text-base">Derechos ARCO</h4>
           <p>
-            Usted tiene derecho en cualquier momento de acceder, rectificar, cancelar u oponerse al tratamiento de sus datos personales (Derechos ARCO), enviando una solicitud por escrito a nuestra cuenta de correo:{" "}
-            <a href={`mailto:${siteConfig.contact.email}`} className="text-reclim-primary font-semibold underline">
-              {siteConfig.contact.email}
-            </a>.
+            Usted tiene derecho en cualquier momento de acceder, rectificar, cancelar u oponerse al tratamiento de sus datos personales (Derechos ARCO), enviando una solicitud por escrito a través del formulario de contacto oficial de este sitio web.
           </p>
 
           <div className="p-3 bg-reclim-surface rounded-xl text-xs text-gray-500">

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { X, MessageSquare, Mail, MapPin, ExternalLink } from "lucide-react";
+import { X, MessageSquare, MapPin } from "lucide-react";
 import { siteConfig } from "../config/siteConfig";
-import { trackContactClick } from "../utils/analytics";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -45,12 +44,6 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeS
         target.scrollIntoView({ behavior: "smooth" });
       }
     }, 150);
-  };
-
-  const handleWhatsApp = () => {
-    trackContactClick("whatsapp_floating");
-    window.open(siteConfig.socialLinks.whatsapp, "_blank", "noopener,noreferrer");
-    onClose();
   };
 
   return (
@@ -102,29 +95,15 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeS
         <div className="pt-6 border-t border-gray-100 mt-6 space-y-4">
           <button
             onClick={() => handleLinkClick("#contacto")}
-            className="w-full flex items-center justify-center gap-2 bg-reclim-dark hover:bg-reclim-primary text-white py-3.5 px-4 rounded-xl font-medium text-sm transition-colors shadow-sm"
+            className="w-full flex items-center justify-center gap-2 bg-reclim-dark hover:bg-reclim-primary text-white py-3.5 px-4 rounded-xl font-semibold text-sm transition-colors shadow-sm cursor-pointer"
           >
             <MessageSquare className="w-4 h-4 text-reclim-accent" />
-            <span>Solicita más información</span>
+            <span>Solicitar información</span>
           </button>
 
-          <button
-            onClick={handleWhatsApp}
-            className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-medium text-sm transition-colors shadow-sm"
-          >
-            <span>WhatsApp directo</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </button>
-
-          <div className="text-xs text-gray-500 pt-2 space-y-1">
-            <div className="flex items-center gap-2">
-              <Mail className="w-3.5 h-3.5 text-reclim-primary" />
-              <span>{siteConfig.contact.email}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-reclim-primary" />
-              <span>{siteConfig.contact.coverageScope}</span>
-            </div>
+          <div className="text-xs text-gray-500 pt-2 flex items-center gap-2">
+            <MapPin className="w-3.5 h-3.5 text-reclim-primary shrink-0" />
+            <span>{siteConfig.contact.coverageScope}</span>
           </div>
         </div>
       </div>

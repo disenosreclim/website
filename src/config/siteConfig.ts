@@ -30,18 +30,10 @@ export const siteConfig = {
     fullUrl: "https://www.reclim.com",
   },
 
-  // Contact details - central configuration for easy updates
+  // Contact details & operational scope
   contact: {
-    phoneDisplay: "+52 55 5555 5555",
-    phoneValue: "+525555555555",
-    email: "contacto@reclim.com",
-    // WhatsApp configuration
-    whatsappNumber: "525555555555",
-    whatsappMessage: "Hola RECLIM, me gustaría solicitar información sobre sus servicios de recolección de equipos electrónicos.",
-    address: "Ciudad de México, México",
     coverageScope: "Cobertura en 7 ciudades de México",
-    // Flag to indicate placeholder state during development
-    isPlaceholder: true,
+    attentionMode: "Recepción de solicitudes vía formulario web",
   },
 
   // 7 official coverage cities
@@ -128,13 +120,6 @@ export const siteConfig = {
     "Más de 100 equipos",
     "Aún no lo sabemos",
   ],
-
-  // Social Links (placeholders ready to be populated)
-  socialLinks: {
-    facebook: "https://www.facebook.com/reclim",
-    instagram: "https://www.instagram.com/reclim",
-    whatsapp: "https://wa.me/525555555555?text=Hola%20RECLIM",
-  },
 
   // Google Analytics ID
   analytics: {

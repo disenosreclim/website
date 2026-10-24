@@ -7,7 +7,6 @@ import { CoverageSection } from "./components/CoverageSection";
 import { ProcessSection } from "./components/ProcessSection";
 import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
-import { FloatingWhatsApp } from "./components/FloatingWhatsApp";
 import { PrivacyModal } from "./components/PrivacyModal";
 
 export function App() {
@@ -66,9 +65,6 @@ export function App() {
 
       {/* Footer */}
       <Footer onOpenPrivacy={() => setIsPrivacyOpen(true)} />
-
-      {/* Floating WhatsApp Action Button */}
-      <FloatingWhatsApp />
 
       {/* Privacy Notice Modal */}
       <PrivacyModal

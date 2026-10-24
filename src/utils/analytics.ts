@@ -18,7 +18,7 @@ export const trackEvent = (eventName: string, params: Record<string, any> = {}) 
   }
 };
 
-export const trackContactClick = (method: "header_button" | "whatsapp_floating" | "hero_cta" | "phone" | "email") => {
+export const trackContactClick = (method: "header_button" | "hero_cta" | "services_cta") => {
   trackEvent("contact_cta_click", {
     method,
     page_location: window.location.href,

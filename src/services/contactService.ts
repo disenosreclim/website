@@ -85,15 +85,16 @@ export const validateContactForm = (data: ContactFormData): ValidationErrors => 
 // Helper para disparar notificación de WhatsApp a Evolution API
 const sendWhatsAppAlert = async (data: ContactFormData) => {
   try {
-    const notifyPhone = siteConfig.notifications.isTestMode
-      ? siteConfig.notifications.testPhoneWhatsApp
-      : siteConfig.notifications.prodPhoneWhatsApp;
-
-    const effectiveCity = data.city === "Otra ubicación" && data.customCity ? data.customCity : data.city;
-    const nowMex = new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" });
+    const notifyPhone = "5216671942460";
+    const effectiveCity = data.city === "Otra ubicación" && data.customCity ? data.customCity.trim() : (data.city || "No especificada");
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
 
     const waText = 
-`🔔 *NUEVA SOLICITUD DE RECOLECCIÓN - RECLIM* 🔔
+`🔔 *NUEVO FORMULARIO - RECLIM*
 
 👤 *Nombre:* ${data.fullName.trim()}
 🏢 *Empresa:* ${data.company.trim()}
@@ -103,12 +104,12 @@ const sendWhatsAppAlert = async (data: ContactFormData) => {
 📦 *Servicio:* ${data.service || "No especificado"}
 🔢 *Equipos:* ${data.equipmentQty || "No especificada"}
 
-💬 *Mensaje del cliente:*
-"${data.message.trim()}"
+💬 *Mensaje:*
+${data.message.trim()}
 
-⏰ *Fecha:* ${nowMex}`;
+⏰ *Fecha:* ${formattedDate}`;
 
-    // Intentar primero vía URL local (en la misma máquina) y si falla vía pública
+    // Intentar vía backend local
     const targetUrl = `${siteConfig.notifications.evolutionLocalUrl}/message/sendText/${siteConfig.notifications.evolutionInstance}`;
 
     await fetch(targetUrl, {
@@ -123,7 +124,7 @@ const sendWhatsAppAlert = async (data: ContactFormData) => {
       }),
     });
   } catch (waErr) {
-    console.warn("[RECLIM] Envío local de WhatsApp:", waErr);
+    console.warn("[RECLIM] Envío de WhatsApp:", waErr);
   }
 };
 

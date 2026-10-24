@@ -49,11 +49,10 @@ website/
 │   │   ├── ServicesSection.tsx # 4 servicios oficiales confirmados
 │   │   ├── CoverageSection.tsx # Experiencia desde 2017 y mapa de 7 ciudades
 │   │   ├── ProcessSection.tsx  # Flujo en 4 pasos + ¿Por qué elegirnos?
-│   │   ├── ContactSection.tsx  # Sección de contacto y datos oficiales
+│   │   ├── ContactSection.tsx  # Sección de contacto y atención corporativa
 │   │   ├── ContactForm.tsx     # Formulario validado con selector condicional
 │   │   ├── PrivacyModal.tsx    # Modal con Aviso de Privacidad
-│   │   ├── FloatingWhatsApp.tsx# Botón flotante para WhatsApp directo
-│   │   └── Footer.tsx          # Pie de página corporativo
+│   │   └── Footer.tsx          # Pie de página corporativo limpio sin redes sociales
 │   ├── config/
 │   │   └── siteConfig.ts       # Configuración centralizada de datos (teléfonos, ciudades, textos)
 │   ├── services/

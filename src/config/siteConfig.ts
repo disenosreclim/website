@@ -34,6 +34,32 @@ export const siteConfig = {
   contact: {
     coverageScope: "Cobertura en 7 ciudades de México",
     attentionMode: "Recepción de solicitudes vía formulario web",
+    officialEmail: "reciclandoelectronicaculican@gmail.com",
+    officialPhone: "6674319527",
+  },
+
+  // Flujo de notificaciones y automatizaciones (Email & WhatsApp)
+  notifications: {
+    // Si isTestMode es true, envía a los destinatarios de prueba; en false, a producción.
+    isTestMode: true,
+
+    // Destinatarios de PRUEBA (actuales)
+    testEmail: "disenosreclim@gmail.com",
+    testPhoneWhatsApp: "5216671942460",
+
+    // Destinatarios OFICIALES de PRODUCCIÓN
+    prodEmail: "reciclandoelectronicaculican@gmail.com",
+    prodPhoneWhatsApp: "5216674319527",
+
+    // Datos oficiales de contacto RECLIM que se entregan al cliente
+    officialEmail: "reciclandoelectronicaculican@gmail.com",
+    officialPhone: "6674319527",
+
+    // Configuración Evolution API
+    evolutionLocalUrl: "http://localhost:8082",
+    evolutionPublicUrl: "https://whatsapp.la2pc.com",
+    evolutionApiKey: "LaSegundaPC_WA_ClaveSecreta_2026_API",
+    evolutionInstance: "la-segunda-pc",
   },
 
   // 7 official coverage cities

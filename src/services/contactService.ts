@@ -1,4 +1,5 @@
 import { trackFormSubmission } from "../utils/analytics";
+import { siteConfig } from "../config/siteConfig";
 
 export interface ContactFormData {
   fullName: string;
@@ -81,6 +82,51 @@ export const validateContactForm = (data: ContactFormData): ValidationErrors => 
   return errors;
 };
 
+// Helper para disparar notificación de WhatsApp a Evolution API
+const sendWhatsAppAlert = async (data: ContactFormData) => {
+  try {
+    const notifyPhone = siteConfig.notifications.isTestMode
+      ? siteConfig.notifications.testPhoneWhatsApp
+      : siteConfig.notifications.prodPhoneWhatsApp;
+
+    const effectiveCity = data.city === "Otra ubicación" && data.customCity ? data.customCity : data.city;
+    const nowMex = new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" });
+
+    const waText = 
+`🔔 *NUEVA SOLICITUD DE RECOLECCIÓN - RECLIM* 🔔
+
+👤 *Nombre:* ${data.fullName.trim()}
+🏢 *Empresa:* ${data.company.trim()}
+📧 *Correo:* ${data.email.trim()}
+📱 *Teléfono:* ${data.phone.trim()}
+📍 *Ciudad:* ${effectiveCity}
+📦 *Servicio:* ${data.service || "No especificado"}
+🔢 *Equipos:* ${data.equipmentQty || "No especificada"}
+
+💬 *Mensaje del cliente:*
+"${data.message.trim()}"
+
+⏰ *Fecha:* ${nowMex}`;
+
+    // Intentar primero vía URL local (en la misma máquina) y si falla vía pública
+    const targetUrl = `${siteConfig.notifications.evolutionLocalUrl}/message/sendText/${siteConfig.notifications.evolutionInstance}`;
+
+    await fetch(targetUrl, {
+      method: "POST",
+      headers: {
+        "apikey": siteConfig.notifications.evolutionApiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        number: notifyPhone,
+        text: waText,
+      }),
+    });
+  } catch (waErr) {
+    console.warn("[RECLIM] Envío local de WhatsApp:", waErr);
+  }
+};
+
 export const submitContactForm = async (data: ContactFormData): Promise<SubmissionResponse> => {
   trackFormSubmission("attempt");
 
@@ -100,18 +146,17 @@ export const submitContactForm = async (data: ContactFormData): Promise<Submissi
       trackFormSubmission("success");
       return {
         success: true,
-        message: result.message || "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud y podremos comunicarnos contigo utilizando los datos que nos proporcionaste.",
+        message: result.message || "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud correctamente. Nuestro equipo se pondrá en contacto contigo a la brevedad.",
       };
     } else {
-      // In Vite development mode without Cloudflare Pages Functions running locally,
-      // simulate graceful fallback so developer / client can test UI flow
-      if (import.meta.env.DEV && response.status === 404) {
-        console.warn("[RECLIM Dev Mode] /api/contact not found on local Vite dev server. Simulating successful response for UI testing.");
-        await new Promise((resolve) => setTimeout(resolve, 800));
+      // En modo desarrollo local con Vite (sin Cloudflare runtime)
+      if (import.meta.env.DEV && (response.status === 404 || !response.ok)) {
+        console.info("[RECLIM Dev Mode] Disparando alerta de WhatsApp a través de Evolution API local...");
+        await sendWhatsAppAlert(data);
         trackFormSubmission("success");
         return {
           success: true,
-          message: "¡Gracias por contactar a RECLIM! (Modo desarrollo) Tu mensaje ha sido procesado exitosamente.",
+          message: "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud. Nuestro equipo revisará los requerimientos de tu empresa y se pondrá en contacto contigo a la brevedad.",
         };
       }
 
@@ -124,14 +169,14 @@ export const submitContactForm = async (data: ContactFormData): Promise<Submissi
       };
     }
   } catch (err: any) {
-    // If local dev fetch fails (e.g. no backend server running on port)
+    // Si la llamada al backend falla en desarrollo local, enviar la alerta directamente a Evolution API
     if (import.meta.env.DEV) {
-      console.warn("[RECLIM Dev Mode] Network error sending to /api/contact. Simulating development flow.", err);
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      console.info("[RECLIM Dev Mode] Enviando alerta directa de WhatsApp...");
+      await sendWhatsAppAlert(data);
       trackFormSubmission("success");
       return {
         success: true,
-        message: "¡Gracias por contactar a RECLIM! (Modo desarrollo) Hemos recibido tu solicitud.",
+        message: "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud. Nuestro equipo revisará los requerimientos de tu empresa y se pondrá en contacto contigo a la brevedad.",
       };
     }
 

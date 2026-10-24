@@ -107,13 +107,31 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenPrivacy }) => {
           <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full mx-auto flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h4 className="text-xl font-bold text-emerald-900">¡Mensaje enviado con éxito!</h4>
+          <h4 className="text-xl font-bold text-emerald-900">¡Solicitud recibida con éxito!</h4>
           <p className="text-sm text-emerald-800 leading-relaxed max-w-md mx-auto">
             {statusMessage}
           </p>
+
+          {/* Información de contacto para el cliente */}
+          <div className="my-4 p-4 bg-white rounded-xl border border-emerald-200 text-left max-w-sm mx-auto shadow-xs">
+            <span className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-2">
+              Información de contacto directo RECLIM:
+            </span>
+            <div className="space-y-1.5 text-xs sm:text-sm text-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-emerald-800">Correo:</span>
+                <span className="text-gray-900 select-all font-medium">reciclandoelectronicaculican@gmail.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-emerald-800">Teléfono:</span>
+                <span className="text-gray-900 select-all font-medium">6674319527</span>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={() => setSubmissionStatus("idle")}
-            className="mt-4 inline-flex items-center gap-2 bg-reclim-primary hover:bg-reclim-dark text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-colors cursor-pointer"
+            className="mt-2 inline-flex items-center gap-2 bg-reclim-primary hover:bg-reclim-dark text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-colors cursor-pointer"
           >
             Enviar otra consulta
           </button>

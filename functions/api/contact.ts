@@ -2,6 +2,11 @@ interface Env {
   CONTACT_EMAIL?: string;
   RESEND_API_KEY?: string;
   WEBHOOK_URL?: string;
+  EVOLUTION_API_URL?: string;
+  EVOLUTION_API_KEY?: string;
+  EVOLUTION_INSTANCE?: string;
+  NOTIFY_PHONE_WA?: string;
+  IS_TEST_MODE?: string;
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -15,7 +20,17 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     const body = await context.request.json() as any;
-    const { fullName, email, phone, company, city, customCity, service, customService, message, privacyAccepted } = body;
+    const {
+      fullName,
+      email,
+      phone,
+      company,
+      city,
+      customCity,
+      service,
+      equipmentQty,
+      message,
+    } = body;
 
     // Server-side validation
     if (!fullName || typeof fullName !== "string" || !fullName.trim()) {
@@ -49,38 +64,60 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     if (!message || typeof message !== "string" || message.trim().length < 5) {
       return new Response(
-        JSON.stringify({ success: false, message: "Por favor describe brevemente tus necesidades en el mensaje." }),
+        JSON.stringify({ success: false, message: "Por favor describe brevemente tus requerimientos en el mensaje." }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // Optional webhook or email integration if Cloudflare secrets are set
-    if (context.env.WEBHOOK_URL) {
-      try {
-        await fetch(context.env.WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            timestamp: new Date().toISOString(),
-            data: {
-              fullName: fullName.trim(),
-              email: email.trim(),
-              phone: phone.trim(),
-              company: company.trim(),
-              city: city === "Otra ciudad" && customCity ? customCity.trim() : (city || "No especificada"),
-              service: service || "No especificado",
-              message: message.trim(),
-            }
-          })
-        });
-      } catch (err) {
-        console.error("Error forwarding to webhook:", err);
-      }
+    const effectiveCity = city === "Otra ubicación" && customCity ? customCity.trim() : (city || "No especificada");
+    const nowMex = new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" });
+
+    // Determinar modo de pruebas o producción
+    const isTest = context.env.IS_TEST_MODE !== "false";
+    const notifyWaPhone = context.env.NOTIFY_PHONE_WA || (isTest ? "5216671942460" : "5216674319527");
+    const notifyAdminEmail = context.env.CONTACT_EMAIL || (isTest ? "disenosreclim@gmail.com" : "reciclandoelectronicaculican@gmail.com");
+
+    // ── 1. ENVÍO DE NOTIFICACIÓN WHATSAPP MEDIANTE EVOLUTION API ───────────
+    const evolutionUrl = context.env.EVOLUTION_API_URL || "https://whatsapp.la2pc.com";
+    const evolutionKey = context.env.EVOLUTION_API_KEY || "LaSegundaPC_WA_ClaveSecreta_2026_API";
+    const evolutionInst = context.env.EVOLUTION_INSTANCE || "la-segunda-pc";
+
+    const waText = 
+`🔔 *NUEVA SOLICITUD DE RECOLECCIÓN - RECLIM* 🔔
+
+👤 *Nombre:* ${fullName.trim()}
+🏢 *Empresa:* ${company.trim()}
+📧 *Correo:* ${email.trim()}
+📱 *Teléfono:* ${phone.trim()}
+📍 *Ciudad:* ${effectiveCity}
+📦 *Servicio:* ${service || "No especificado"}
+🔢 *Equipos:* ${equipmentQty || "No especificado"}
+
+💬 *Mensaje:*
+"${message.trim()}"
+
+⏰ *Fecha:* ${nowMex}`;
+
+    try {
+      await fetch(`${evolutionUrl}/message/sendText/${evolutionInst}`, {
+        method: "POST",
+        headers: {
+          "apikey": evolutionKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          number: notifyWaPhone,
+          text: waText,
+        }),
+      });
+    } catch (err) {
+      console.error("Error enviando WhatsApp vía Evolution API:", err);
     }
 
-    // If Resend API key is configured
-    if (context.env.RESEND_API_KEY && context.env.CONTACT_EMAIL) {
+    // ── 2. ENVÍO DE CORREO (SI RESEND ESTÁ CONFIGURADO) ─────────────────────
+    if (context.env.RESEND_API_KEY) {
       try {
+        // Correo 1: Notificación para el equipo de RECLIM
         await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -88,34 +125,92 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "RECLIM Web <notificaciones@reclim.com>",
-            to: [context.env.CONTACT_EMAIL],
-            subject: `Nueva solicitud de servicio RECLIM: ${company.trim()} (${city || "México"})`,
+            from: "RECLIM Notificaciones <notificaciones@reclim.com>",
+            to: [notifyAdminEmail],
+            subject: `Nueva solicitud RECLIM: ${company.trim()} (${effectiveCity})`,
             text: `
-Nueva solicitud recibida desde el sitio web www.reclim.com
+Nueva solicitud recibida a través del sitio web oficial www.reclim.com
 
-Nombre: ${fullName}
-Empresa: ${company}
-Correo: ${email}
-Teléfono: ${phone}
-Ciudad: ${city === "Otra ciudad" ? customCity : city}
-Servicio: ${service}
+Nombre: ${fullName.trim()}
+Empresa: ${company.trim()}
+Correo: ${email.trim()}
+Teléfono: ${phone.trim()}
+Ciudad: ${effectiveCity}
+Servicio: ${service || "No especificado"}
+Cantidad de equipos: ${equipmentQty || "No especificada"}
+
 Mensaje:
-${message}
+${message.trim()}
 
-Fecha: ${new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" })}
-            `
-          })
+Fecha y hora: ${nowMex}
+            `,
+          }),
+        });
+
+        // Correo 2: Confirmación automática para el cliente con los datos de RECLIM
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${context.env.RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "RECLIM <contacto@reclim.com>",
+            to: [email.trim()],
+            subject: `Hemos recibido tu solicitud de recolección - RECLIM`,
+            text: `
+Hola ${fullName.trim()},
+
+¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud para la gestión de equipos tecnológicos en desuso para ${company.trim()}.
+
+Nuestro equipo logístico revisará los detalles de tu requerimiento y un asesor se pondrá en contacto contigo a la brevedad.
+
+Si requieres atención inmediata o tienes dudas sobre tus equipos, puedes contactarnos directamente:
+📧 Correo: reciclandoelectronicaculican@gmail.com
+📱 Teléfono: 6674319527
+
+Atentamente,
+Equipo de Gestión y Recolección — RECLIM
+www.reclim.com
+            `,
+          }),
         });
       } catch (err) {
-        console.error("Error sending email via Resend:", err);
+        console.error("Error enviando correos vía Resend:", err);
+      }
+    }
+
+    // ── 3. ENVÍO A WEBHOOK OPCIONAL (ZAPIER / MAKE / N8N) ───────────────────
+    if (context.env.WEBHOOK_URL) {
+      try {
+        await fetch(context.env.WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            fullName: fullName.trim(),
+            company: company.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            city: effectiveCity,
+            service: service || "No especificado",
+            equipmentQty: equipmentQty || "No especificada",
+            message: message.trim(),
+          }),
+        });
+      } catch (err) {
+        console.error("Error enviando a Webhook:", err);
       }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud y nos comunicaremos contigo lo antes posible."
+        message: "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud correctamente. Nuestro equipo se pondrá en contacto contigo a la brevedad.",
+        contactInfo: {
+          email: "reciclandoelectronicaculican@gmail.com",
+          phone: "6674319527",
+        }
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
@@ -123,7 +218,7 @@ Fecha: ${new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" })
     return new Response(
       JSON.stringify({
         success: false,
-        message: "No fue posible enviar tu solicitud en este momento. Verifica tu conexión e inténtalo nuevamente más tarde."
+        message: "No fue posible enviar tu solicitud en este momento. Por favor verifica tu conexión e inténtalo nuevamente.",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );

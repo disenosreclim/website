@@ -124,10 +124,6 @@ ${message.trim()}
       JSON.stringify({
         success: true,
         message: "¡Gracias por contactar a RECLIM! Hemos recibido tu solicitud correctamente. Nuestro equipo se pondrá en contacto contigo a la brevedad.",
-        contactInfo: {
-          email: "reciclandoelectronicaculican@gmail.com",
-          phone: "6674319527",
-        }
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );

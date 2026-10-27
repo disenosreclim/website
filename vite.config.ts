@@ -54,7 +54,7 @@ ${message.trim()}
 
 ⏰ *Fecha:* ${formattedDate}`
 
-              const notifyPhone = '5216671942460'
+              const notifyPhone = '5216674319527'
               const evolutionUrl = 'http://127.0.0.1:8082'
               const evolutionKey = 'LaSegundaPC_WA_ClaveSecreta_2026_API'
               const evolutionInst = 'la-segunda-pc'

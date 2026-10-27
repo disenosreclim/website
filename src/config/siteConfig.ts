@@ -40,18 +40,18 @@ export const siteConfig = {
 
   // Flujo de notificaciones y automatizaciones (Email & WhatsApp)
   notifications: {
-    // Si isTestMode es true, envía a los destinatarios de prueba; en false, a producción.
-    isTestMode: true,
+    // Modo de producción activo: envía directamente a los números oficiales
+    isTestMode: false,
 
-    // Destinatarios de PRUEBA (actuales)
-    testEmail: "disenosreclim@gmail.com",
-    testPhoneWhatsApp: "5216671942460",
-
-    // Destinatarios OFICIALES de PRODUCCIÓN
-    prodEmail: "reciclandoelectronicaculican@gmail.com",
+    // Destinatario oficial WhatsApp RECLIM
     prodPhoneWhatsApp: "5216674319527",
+    testPhoneWhatsApp: "5216674319527",
 
-    // Datos oficiales de contacto RECLIM que se entregan al cliente
+    // Correo oficial
+    prodEmail: "reciclandoelectronicaculican@gmail.com",
+    testEmail: "reciclandoelectronicaculican@gmail.com",
+
+    // Datos oficiales de contacto RECLIM
     officialEmail: "reciclandoelectronicaculican@gmail.com",
     officialPhone: "6674319527",
 

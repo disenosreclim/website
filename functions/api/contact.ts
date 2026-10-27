@@ -76,9 +76,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const year = now.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
 
-    // Destinatario de WhatsApp (pruebas: 5216671942460)
-    const isTest = context.env.IS_TEST_MODE !== "false";
-    const notifyWaPhone = context.env.NOTIFY_PHONE_WA || (isTest ? "5216671942460" : "5216674319527");
+    // Destinatario oficial de WhatsApp RECLIM: 5216674319527
+    const notifyWaPhone = context.env.NOTIFY_PHONE_WA || "5216674319527";
 
     // ── 1. ENVÍO DE NOTIFICACIÓN WHATSAPP MEDIANTE EVOLUTION API ───────────
     const evolutionUrl = context.env.EVOLUTION_API_URL || "https://whatsapp.la2pc.com";

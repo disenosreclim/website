@@ -85,7 +85,7 @@ export const validateContactForm = (data: ContactFormData): ValidationErrors => 
 // Helper para disparar notificación de WhatsApp a Evolution API
 const sendWhatsAppAlert = async (data: ContactFormData) => {
   try {
-    const notifyPhone = "5216671942460";
+    const notifyPhone = "5216674319527";
     const effectiveCity = data.city === "Otra ubicación" && data.customCity ? data.customCity.trim() : (data.city || "No especificada");
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");

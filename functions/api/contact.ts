@@ -6,7 +6,6 @@ interface Env {
   EVOLUTION_API_KEY?: string;
   EVOLUTION_INSTANCE?: string;
   NOTIFY_PHONE_WA?: string;
-  IS_TEST_MODE?: string;
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
